@@ -83,15 +83,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这篇是对linux平台下redis事件循环的总结。</p>
-<p>redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。</p>
-<p>与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae_kqueue.c、ae_select.c，anet.h、anet.c是建立tcp连接相关。</p>
-<p>事件循环指的是通过epoll系统调用获取已经可以读写的文件描述符，通过遍历这些已经可以读写的文件描述符，去执行相应的回调函数。</p>
+        <p>  这篇是对linux平台下redis事件循环的总结。</p>
+<p>  redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。</p>
+<p>  与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae_kqueue.c、ae_select.c，anet.h、anet.c是建立tcp连接相关。</p>
+<p>  事件循环指的是通过epoll系统调用获取已经可以读写的文件描述符，通过遍历这些已经可以读写的文件描述符，去执行相应的回调函数。</p>
+<p>  epoll事件循环的一般用法是，先通过epoll_create创建epoll实例epfd，再通过epoll_ctl将需要监测的文件描述符fd以及fa对应的监测事件添加到epfd中，然后在while （1）循环中调用epoll_wait，如果没有监测事件的发生，epoll_wait会阻塞，当有监测事件发生时，epoll_wait会返回这些事件的个数，以及那些事件发生了，这时可以调用相应的事件处理函数来处理相应的事件。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://null4fun.com/2017/03/02/event-loop在redis中的使用/" data-id="cizse0hfc0000jefyh16mu66l" class="article-share-link">Share</a>
+      <a data-url="http://null4fun.com/2017/03/02/event-loop在redis中的使用/" data-id="cizseea3q0000m3fyoyxub5fp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -136,7 +137,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://null4fun.com/2017/03/02/hello-world/" data-id="cizse0hfs0001jefyh5fwlro5" class="article-share-link">Share</a>
+      <a data-url="http://null4fun.com/2017/03/02/hello-world/" data-id="cizseea3u0001m3fyfobxfw4h" class="article-share-link">Share</a>
       
       
     </footer>
