@@ -3,20 +3,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>event loop在redis中的使用 | event loop in redis</title>
+  <title>event loop在redis中的使用 | 知行合一</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="server可以采用多进程、多线程、也可以采用I/O多路复用技术实现">
+  <meta name="description" content="这篇是对linux平台下redis事件循环的总结。
+redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。
+与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae">
 <meta property="og:type" content="article">
 <meta property="og:title" content="event loop在redis中的使用">
 <meta property="og:url" content="http://null4fun.com/2017/03/02/event-loop在redis中的使用/index.html">
-<meta property="og:site_name" content="event loop in redis">
-<meta property="og:description" content="server可以采用多进程、多线程、也可以采用I/O多路复用技术实现">
-<meta property="og:updated_time" content="2017-03-01T18:22:58.000Z">
+<meta property="og:site_name" content="知行合一">
+<meta property="og:description" content="这篇是对linux平台下redis事件循环的总结。
+redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。
+与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae">
+<meta property="og:updated_time" content="2017-03-02T12:48:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="event loop在redis中的使用">
-<meta name="twitter:description" content="server可以采用多进程、多线程、也可以采用I/O多路复用技术实现">
+<meta name="twitter:description" content="这篇是对linux平台下redis事件循环的总结。
+redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。
+与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae">
   
-    <link rel="alternate" href="/atom.xml" title="event loop in redis" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="知行合一" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -37,12 +43,8 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">event loop in redis</a>
+        <a href="/" id="logo">知行合一</a>
       </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">epoll</a>
-        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -89,12 +91,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>server可以采用多进程、多线程、也可以采用I/O多路复用技术实现</p>
+        <p>这篇是对linux平台下redis事件循环的总结。</p>
+<p>redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。</p>
+<p>与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae_kqueue.c、ae_select.c，anet.h、anet.c是建立tcp连接相关。</p>
+<p>事件循环指的是通过epoll系统调用获取已经可以读写的文件描述符，通过遍历这些已经可以读写的文件描述符，去执行相应的回调函数。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://null4fun.com/2017/03/02/event-loop在redis中的使用/" data-id="cizraog4o0000uefycof35tby" class="article-share-link">Share</a>
+      <a data-url="http://null4fun.com/2017/03/02/event-loop在redis中的使用/" data-id="cizse0hfc0000jefyh16mu66l" class="article-share-link">Share</a>
       
       
     </footer>
