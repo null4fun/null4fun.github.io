@@ -15,7 +15,7 @@
 <meta property="og:description" content="这篇是对linux平台下redis事件循环的总结。
   redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。
   与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evpor">
-<meta property="og:updated_time" content="2017-03-06T14:34:10.000Z">
+<meta property="og:updated_time" content="2017-03-06T14:38:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="event loop在redis中的使用">
 <meta name="twitter:description" content="这篇是对linux平台下redis事件循环的总结。
@@ -96,19 +96,13 @@
 <p>  与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae_kqueue.c、ae_select.c，anet.h、anet.c是建立tcp连接相关。</p>
 <p>  事件循环指的是通过epoll系统调用获取已经可以读写的文件描述符，通过遍历这些已经可以读写的文件描述符，去执行相应的回调函数。</p>
 <p>  epoll事件循环的一般用法是，先通过epoll_create创建epoll实例epfd，再通过epoll_ctl将需要监测的文件描述符fd以及fa对应的监测事件添加到epfd中，然后在while （1）循环中调用epoll_wait，如果没有监测事件的发生，epoll_wait会阻塞，当有监测事件发生时，epoll_wait会返回这些事件的个数，以及那些事件发生了，这时可以调用相应的事件处理函数来处理相应的事件。</p>
-<p>  在redis server启动过程中，epoll的使用过程是首先在server.c文件中的main函数中调用initServer()函数<br>  <code>int main(int argc, char* argv[]) {
-        //
-        initServer();
-        //
-        aeMain(server.el);
-        //
-        return 0;
-    }</code><br>  在initServer()函数中通过调用ae.c文件中的函数aeCreateEventLoop()函数初始化epoll实例并赋值给全局变量server的el字段,接着通过调用listenToPort()函数创建特定端口server.port的套接字，backlog、设置非阻塞,接着通过aeCreateTimeEvent()函数添加定时器事件，对应的处理函数为serverCron，通过aeCreateFileEvent()函数将刚才创建并设置好的socket添加到server.el中，并设置好可读事件触发，对应的处理函数为acceptTcpHandler，通过aeCreateFileEvent()添加unix socket描述符，对应处理函数为acceptUnixHandler，最后通过调用aeMain函数开始server.el的事件循环，等待处理定时、文件(网络请求)、时间事件。</p>
+<p>  在redis server启动过程中，epoll的使用过程是首先在server.c文件中的main函数中调用initServer()函数<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">int main(int argc, char* argv[]) &#123;</div><div class="line">    //</div><div class="line">    initServer();</div><div class="line">    //</div><div class="line">    aeMain(server.el);</div><div class="line">    //</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  在initServer()函数中通过调用ae.c文件中的函数aeCreateEventLoop()函数初始化epoll实例并赋值给全局变量server的el字段,接着通过调用listenToPort()函数创建特定端口server.port的套接字，backlog、设置非阻塞,接着通过aeCreateTimeEvent()函数添加定时器事件，对应的处理函数为serverCron，通过aeCreateFileEvent()函数将刚才创建并设置好的socket添加到server.el中，并设置好可读事件触发，对应的处理函数为acceptTcpHandler，通过aeCreateFileEvent()添加unix socket描述符，对应处理函数为acceptUnixHandler，最后通过调用aeMain函数开始server.el的事件循环，等待处理定时、文件(网络请求)、时间事件。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://null4fun.com/2017/03/02/event-loop在redis中的使用/" data-id="cizy7k8730000ujfy5wpu1nf7" class="article-share-link">Share</a>
+      <a data-url="http://null4fun.com/2017/03/02/event-loop在redis中的使用/" data-id="cizy7ovaz0000w2fy59qj583k" class="article-share-link">Share</a>
       
       
     </footer>
